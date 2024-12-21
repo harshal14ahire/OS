@@ -6,7 +6,6 @@ struct Process {
     int arrivalTime;
     int burstTime;
     int priority;
-    int remainingTime;
     int waitingTime;
     int turnaroundTime;
 };
@@ -30,53 +29,32 @@ int main() {
 
     printf("Enter the number of processes: ");
     scanf("%d", &n);
-<<<<<<< HEAD
-	 printf("\n----------------------------------------------------------\nNote that lowest priority Number has Highest priority: \n");
-=======
 
->>>>>>> 6c69d73697be5713621025238224f2cfa0a48b42
     struct Process processes[n];
 
     for (i = 0; i < n; i++) {
         processes[i].id = i+1;
         printf("Enter arrival time, burst time, and priority for process %d: ", i+1);
         scanf("%d %d %d", &processes[i].arrivalTime, &processes[i].burstTime, &processes[i].priority);
-        processes[i].remainingTime = processes[i].burstTime;
         processes[i].waitingTime = 0;
         processes[i].turnaroundTime = 0;
     }
 
+    sortProcesses(processes, n);
+
     printf("\nGantt Chart:\n");
     int time = 0;
-<<<<<<< HEAD
-    //
-    
-    
-    while (1)
-	{
-=======
-    while (1) {
->>>>>>> 6c69d73697be5713621025238224f2cfa0a48b42
-        int highestPriority = -1;
-        for (i = 0; i < n; i++) {
-            if (processes[i].arrivalTime <= time && processes[i].remainingTime > 0) {
-                if (highestPriority == -1 || processes[i].priority < processes[highestPriority].priority)
-                    highestPriority = i;
-            }
+    for (i = 0; i < n; i++) {
+        while (time < processes[i].arrivalTime) {
+            printf("| Idle ");
+            time++;
         }
 
-        if (highestPriority == -1)
-            break;
+        printf("| P%d ", processes[i].id);
+        time += processes[i].burstTime;
 
-        printf("| P%d ", processes[highestPriority].id);
-        processes[highestPriority].remainingTime--;
-
-        time++;
-
-        if (processes[highestPriority].remainingTime == 0) {
-            processes[highestPriority].turnaroundTime = time - processes[highestPriority].arrivalTime;
-            processes[highestPriority].waitingTime = processes[highestPriority].turnaroundTime - processes[highestPriority].burstTime;
-        }
+        processes[i].turnaroundTime = time - processes[i].arrivalTime;
+        processes[i].waitingTime = processes[i].turnaroundTime - processes[i].burstTime;
     }
     printf("|\n");
 
